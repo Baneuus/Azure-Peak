@@ -146,6 +146,10 @@
 			text += " Twice! Disadvantage! ([(prob2defend / 100) * (prob2defend / 100) * 100]%)"
 		to_chat(src, span_info("[text]"))
 
+
+	if(HAS_TRAIT(src, TRAIT_NODEF))
+		prob2defend = 0
+
 	var/parry_status = FALSE
 	if(defender_dualw)
 		if(prob(prob2defend) && extradefroll)
@@ -228,19 +232,14 @@
 			var/dam2take = round((get_complex_damage(AB,user,used_weapon.blade_dulling)/2),1)
 			if(dam2take)
 				var/intdam = used_weapon.max_blade_int ? INTEG_PARRY_DECAY : INTEG_PARRY_DECAY_NOSHARP
+				var/sharp_loss = SHARPNESS_ONHIT_DECAY
 				if(used_weapon == offhand)
 					intdam = INTEG_PARRY_DECAY_NOSHARP
+				if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+					sharp_loss += STRONG_SHP_BONUS
+					intdam += STRONG_INTG_BONUS
 				used_weapon.take_damage(intdam, BRUTE, used_weapon.d_type)
-				used_weapon.remove_bintegrity(SHARPNESS_ONHIT_DECAY, user)
-
-			if(mind && user.mind && HAS_TRAIT(src, TRAIT_COMBAT_AWARE))
-				var/text = "[bodyzone2readablezone(user.zone_selected)]..."
-				if(HAS_TRAIT(user, TRAIT_DECEIVING_MEEKNESS))
-					if(prob(10))
-						text = "<i>Somewhere...</i>"
-						user.balloon_alert(src, text)
-				else
-					user.balloon_alert(src, text)
+				used_weapon.remove_bintegrity(sharp_loss, user)
 			return TRUE
 		else
 			return FALSE
@@ -263,7 +262,7 @@
 			flash_fullscreen("blackflash2")
 			return TRUE
 		else
-			testing("failparry")
+
 			return FALSE
 
 /mob/proc/do_parry(obj/item/W, parrydrain as num, mob/living/user)
@@ -274,10 +273,18 @@
 				playsound(get_turf(src), pick(W.parrysound), 100, FALSE)
 			if(src.client)
 				record_round_statistic(STATS_PARRIES)
+
+			var/def_verb = "parries"
+			var/att_verb = ""
 			if(istype(rmb_intent, /datum/rmb_intent/riposte))
-				src.visible_message(span_boldwarning("<b>[src]</b> ripostes [user] with [W]!"))
-			else
-				src.visible_message(span_boldwarning("<b>[src]</b> parries [user] with [W]!"))
+				def_verb = "[pick("expertly", "deftly")] parries"
+			if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+				att_verb = "'s [pick("hefty", "strong")] attack"
+			var/def_msg = "<b>[src]</b> [def_verb] [user][att_verb] with [W]!"
+
+			visible_message(span_combatsecondary(def_msg), span_boldwarning(def_msg), COMBAT_MESSAGE_RANGE, list(user))
+			to_chat(user, span_boldwarning(def_msg))
+
 			if(!iscarbon(user))	//Non-carbon mobs never make it to the proper parry proc where the other calculations are done.
 				if(W.max_blade_int)
 					W.remove_bintegrity(SHARPNESS_ONHIT_DECAY, user)
@@ -310,3 +317,5 @@
 			record_round_statistic(STATS_PARRIES)
 		playsound(get_turf(src), pick(parry_sound), 100, FALSE)
 		return TRUE
+
+#undef STAM_DRAIN_PER_STR_DIFF_HEAVY_BAL
