@@ -118,6 +118,9 @@
 					caused_wound?.werewolf_infect_attempt()
 					if(prob(30))
 						user.werewolf_feed(bite_victim, 10)
+			if(istype(user.dna.species, /datum/species/gnoll))
+				if(prob(30))
+					user.gnoll_feed(bite_victim, 10)
 			/*
 				ZOMBIE INFECTION VIA BITE
 			*/
@@ -167,6 +170,9 @@
 
 /obj/item/grabbing/bite/valid_check()
 	// We require adjacency to count the grab as valid
+	if(!grabbee)
+		qdel(src)
+		return FALSE
 
 	if(isdullahan(grabbee) && ishuman(grabbed))
 		var/mob/living/carbon/human/target = grabbed
