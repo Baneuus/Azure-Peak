@@ -804,6 +804,11 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	path = /obj/item/clothing/neck/roguetown/psicross/astrata/dasfox
 	ckeywhitelist = list("dasfox")
 
+/datum/loadout_item/donator_dasfox/lance
+	name = "Donator Item - Decorated Lance"
+	path = /obj/item/enchantingkit/dasfox_lance
+	ckeywhitelist = list("dasfox")
+
 /datum/loadout_item/donator_ryan
 	name = "Donator Item - Western Estates Caparison"
 	path = /obj/item/caparison/ryan
@@ -812,6 +817,11 @@ GLOBAL_LIST_EMPTY(loadout_items)
 /datum/loadout_item/donator_ryan/psy_helm
 	name = "Donator Kit - Unorthodoxist Psydonite Helm"
 	path = /obj/item/enchantingkit/ryan_psyhelm
+
+/datum/loadout_item/donator_koruu/hat
+	name = "Donator Kit - Well-Worn Bamboo Hat"
+	path = /obj/item/clothing/head/roguetown/mentorhat/koruu
+	ckeywhitelist = list("koruu")
 
 //////////////////
 //  TRIUMPHS !  //
