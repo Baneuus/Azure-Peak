@@ -11,6 +11,10 @@
 	resistance_flags = ACID_PROOF
 	var/is_infinite = FALSE
 
+/obj/item/reagent_containers/glass/get_mechanics_examine(mob/user)
+	. = ..()
+	. += span_info("Right click on someone to offer your glass to them. If someone else offers a glass to you in response, they'll clink together in celebration!")
+
 /obj/item/reagent_containers/glass/examine(mob/user)
 	. = ..()
 	if(user.mind && ishuman(user))
@@ -216,6 +220,23 @@
 				onfill(E, user, silent = FALSE)
 				qdel(E)
 			return
+
+	if(istype(I, /obj/item/natural/cloth))
+		var/obj/item/natural/cloth/T = I
+		if(T.wet >= 10)
+			to_chat(user, span_warning("[T] is already soaked!"))
+			return
+		var/removereg = /datum/reagent/water
+		if(!reagents.has_reagent(/datum/reagent/water, 5))
+			removereg = /datum/reagent/water/gross
+			if(!reagents.has_reagent(/datum/reagent/water/gross, 5))
+				to_chat(user, span_warning("There's not enough water to soak [T] in."))
+				return
+		wash_atom(T)
+		playsound(src, pick('sound/foley/waterwash (1).ogg','sound/foley/waterwash (2).ogg'), 100, FALSE)
+		reagents.remove_reagent(removereg, 5)
+		user.visible_message(span_info("[user] soaks [T] in [src]."), span_info("I soak [T] in [src]."))
+		return
 	..()
 
 // Called whenever this container is successfully filled via the target.
