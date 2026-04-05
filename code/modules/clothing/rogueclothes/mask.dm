@@ -360,8 +360,34 @@
 	name = "copper mask"
 	icon_state = "cmask"
 	desc = "A heavy copper mask that conceals and protects the face, though not very effectively."
-	armor = ARMOR_PLATE
+	armor = ARMOR_BRONZE
 	smeltresult = /obj/item/ingot/copper
+
+/obj/item/clothing/mask/rogue/facemask/bronze
+	name = "bronze mask"
+	desc = "Glimmering bronze, curved to veil its wearer's face from both judgement and harm."
+	armor = ARMOR_BRONZE
+	armor_class = ARMOR_CLASS_LIGHT
+	icon_state = "bronzemask"
+	item_state = "bronzemask"
+	max_integrity = 150
+	smeltresult = /obj/item/ingot/bronze
+
+/obj/item/clothing/mask/rogue/facemask/bronze/classic
+	name = "bronze death mask"
+	icon_state = "bronzemask_legacy"
+	item_state = "bronzemask_legacy"
+	desc = "Glimmering bronze, meticuliusly shaped to mimic the guise of another. One of civilization's oldest superstitions is the belief that donning such masks would impart a sliver of the mimicked facebearer's power unto its wearer."
+
+/obj/item/clothing/mask/rogue/facemask/bronze/anthro
+	name = "bronze mask"
+	icon_state = "bronzemask_snout"
+	item_state = "bronzemask_snout"
+
+/obj/item/clothing/mask/rogue/facemask/bronze/classic/anthro
+	name = "bronze death mask"
+	icon_state = "bronzemask_legacy_snout"
+	item_state = "bronzemask_legacy_snout"
 
 /obj/item/clothing/mask/rogue/facemask/psydonmask
 	name = "psydonic mask"
@@ -514,6 +540,7 @@
 	desc = "Runes and wards, meant for daemons; the gold has somehow rusted in unnatural, impossible agony. The most prominent of these etchings is in the shape of the Naledian psycross. Armored to protect the wearer's face."
 	max_integrity = 100
 	armor = ARMOR_PLATE
+	slot_flags = ITEM_SLOT_MASK|ITEM_SLOT_HIP
 	flags_inv = HIDEFACE|HIDESNOUT
 	sellprice = 0
 
@@ -528,6 +555,7 @@
 	max_integrity = 150
 	armor = ARMOR_PLATE
 	flags_inv = HIDEFACE|HIDESNOUT
+	slot_flags = ITEM_SLOT_MASK|ITEM_SLOT_HIP
 	sellprice = 0
 
 /obj/item/clothing/mask/rogue/silkmask
