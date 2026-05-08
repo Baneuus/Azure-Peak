@@ -3,17 +3,13 @@
 	name = "Black Oaken Pariah"
 	tutorial = "Carrying extreme beliefs not even befit of the Black Oaks, you have decided to secede yourself from the group and everyone else. This land was once great...and now, wave after wave of monsters and outsiders trample your home. Your people were the ones that settled these lands, and the foreign-backed Crown, deceitful and arrogant, has denied your people the rewards they deserve! Your extensive training in the Black Oaks has given you skill in both blades and magycks. A bounty from the crown follows you, as you had already done enough to be officially condemned by the group that was not committed to the cause due to the lure of coin."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = list(
-		/datum/species/human/halfelf,
-		/datum/species/elf/wood,
-		/datum/species/elf/dark,
-	)
+	forbidden_races = list(RACES_BLACKOAK)
 	outfit = /datum/outfit/job/roguetown/wretch/pariah
 	cmode_music = 'sound/music/combat_blackoak.ogg'
 	maximum_possible_slots = 1
 	class_select_category = CLASS_CAT_RACIAL
 	category_tags = list(CTAG_WRETCH)
-	traits_applied = list(TRAIT_AZURENATIVE, TRAIT_OUTDOORSMAN, TRAIT_BLACKOAK, TRAIT_DODGEEXPERT, TRAIT_ARCYNE, TRAIT_WOODWALKER)
+	traits_applied = list(TRAIT_AZURENATIVE, TRAIT_OUTDOORSMAN, TRAIT_BLACKOAK, TRAIT_DODGEEXPERT, TRAIT_ARCYNE, TRAIT_WOODWALKER, TRAIT_EXPERT_HUNTER)
 	//lower-than-avg stats for wretch but their traits are insanely good
 	subclass_stats = list(
 		STATKEY_INT = 1,
@@ -22,7 +18,7 @@
 		STATKEY_CON = 1,
 		STATKEY_WIL = 1,
 	)
-	subclass_mage_aspects = list("mastery" = FALSE, "major" = 0, "minor" = 0, "utilities" = 4, "ward" = TRUE)
+	subclass_mage_aspects = list("mastery" = FALSE, "major" = 0, "minor" = 0, "utilities" = 4)
 	subclass_languages = list(/datum/language/oldazurian)
 	subclass_skills = list(
 		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
@@ -42,6 +38,7 @@
 		/datum/skill/craft/crafting = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/labor/farming = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/magic/arcane = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/misc/hunting = SKILL_LEVEL_NOVICE,
 	)
 	subclass_stashed_items = list(
         "Sewing Kit" =  /obj/item/repair_kit,
@@ -115,7 +112,7 @@
 				H.mind.AddSpell(new /datum/action/cooldown/spell/advance)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/gate_of_reckoning)
 			if("macebearer")
-				H.mind.AddSpell(new /datum/action/cooldown/spell/shatter)
+				H.mind.AddSpell(new /datum/action/cooldown/spell/projectile/kastvyl)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/tremor)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/charge)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/cataclysm)
@@ -154,14 +151,26 @@
 			H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_EXPERT, TRUE)
 		if("macebearer")
 			backr = /obj/item/rogueweapon/shield/wood
-			var/mace_weapons = list("Steel Mace", "Steel Warhammer")
+			var/mace_weapons = list("Steel Mace", "Steel Warhammer", "Grand Mace", "Battle Axe", "Steel Greataxe")
 			var/mace_choice = input(H, "Choose your WEAPON.", "FOR THE OAKS AND THE PEAKS.") as anything in mace_weapons
+			var/picked_axe = FALSE
 			switch(mace_choice)
 				if("Steel Mace")
 					r_hand = /obj/item/rogueweapon/mace/steel
 				if("Steel Warhammer")
 					r_hand = /obj/item/rogueweapon/mace/warhammer/steel
-			H.adjust_skillrank_up_to(/datum/skill/combat/maces, SKILL_LEVEL_EXPERT, TRUE)
+				if("Grand Mace")
+					r_hand = /obj/item/rogueweapon/mace/goden/steel
+				if("Battle Axe")
+					r_hand = /obj/item/rogueweapon/stoneaxe/battle
+					picked_axe = TRUE
+				if("Steel Greataxe")
+					r_hand = /obj/item/rogueweapon/greataxe/steel
+					picked_axe = TRUE
+			if(picked_axe)
+				H.adjust_skillrank_up_to(/datum/skill/combat/axes, SKILL_LEVEL_EXPERT, TRUE)
+			else
+				H.adjust_skillrank_up_to(/datum/skill/combat/maces, SKILL_LEVEL_EXPERT, TRUE)
 
 	var/helmets = list("Woad Elven Barbute", "Elven Barbute", "Winged Elven Barbute")
 	var/helmet_choice = input(H, "Choose your HELMET.", "LEAVES OVER STEEL.") as anything in helmets
